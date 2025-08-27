@@ -8,6 +8,7 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "baseUrl": "./src",
+    "sourceMap": true,
     "paths": {
       "@types/*": ["./types/*"]
     }

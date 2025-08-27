@@ -1,13 +1,19 @@
+import { PaginatedResponseSchema } from "./types/Jira/PaginatedResponse";
+import { SprintValidationSchema } from "./types/Sprint";
+import type { Sprint } from "./types/Sprint";
+
 export class JiraHttpClient {
   readonly baseUrl: string;
   private apiEndpoint: string;
+  private agileEndpoint: string;
   private accessToken: string;
   private requestInit: RequestInit;
 
   constructor(baseUrl: string, accessToken: string) {
     this.baseUrl = baseUrl;
     this.accessToken = accessToken;
-    this.apiEndpoint = `${this.baseUrl}/rest/agile/1.0`;
+    this.apiEndpoint = `${this.baseUrl}/rest/api/3`;
+    this.agileEndpoint = `${this.baseUrl}/rest/agile/1.0`;
     this.requestInit = {
       headers: {
         Authorization: `Bearer ${this.accessToken}`,
@@ -18,9 +24,39 @@ export class JiraHttpClient {
   }
 
   async GetBoardById(id: number) {
-    const data = await fetch(`${this.apiEndpoint}/board/${id}`, {
+    const data = await fetch(`${this.agileEndpoint}/board/${id}`, {
       ...this.requestInit,
     });
     return await data.json();
+  }
+
+  async GetBoardSprints(id: number) {
+    let fetchMore = true;
+    let cursor = 0;
+    let data: Sprint[] = [];
+    const schema = PaginatedResponseSchema(SprintValidationSchema);
+
+    while (fetchMore) {
+      console.debug("Fetching sprints...");
+      const response = await this.fetchBoardSprintData(id, cursor);
+      const result = await schema.parseAsync(await response.json());
+      if (result.isLast) {
+        fetchMore = false;
+      }
+      cursor += result.maxResults;
+      data = [...data, ...result.values];
+      console.debug("Fetching more sprints...");
+    }
+    console.trace(data);
+    return data;
+  }
+
+  private async fetchBoardSprintData(boardId: number, startAt: number = 0) {
+    return await fetch(
+      `${this.agileEndpoint}/board/${boardId}/sprint?state=closed&startAt=${startAt}`,
+      {
+        ...this.requestInit,
+      }
+    );
   }
 }

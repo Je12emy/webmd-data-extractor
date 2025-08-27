@@ -13,6 +13,6 @@ program
     "https://jira.internetbrands.com",
     process.env.ACCESS_TOKEN as string
   );
-  const board = await client.GetBoardById(2028);
-  console.log(board);
+  const sprints = await client.GetBoardSprints(2028);
+  console.log(sprints.sort((a, b) => b.id - a.id));
 })();
