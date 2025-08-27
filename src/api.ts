@@ -37,7 +37,7 @@ export class JiraHttpClient {
     const schema = PaginatedAgileResponseSchema(SprintValidationSchema);
 
     while (fetchMore) {
-      console.debug("Fetching sprints...");
+      // console.debug("Fetching sprints...");
       const response = await this.fetchBoardSprintData(id, cursor);
       const result = await schema.parseAsync(await response.json());
       if (result.isLast) {
@@ -45,9 +45,9 @@ export class JiraHttpClient {
       }
       cursor += result.maxResults;
       data = [...data, ...result.values];
-      console.debug("Fetching more sprints...");
+      // console.debug("Fetching more sprints...");
     }
-    console.trace(data);
+    // console.trace(data);
     return data;
   }
 
