@@ -1,4 +1,5 @@
 #!/usr/bin/env node
+import { FilterForIncompleteIssuesInSprint } from "./types/Issue";
 import { JiraHttpClient } from "./api";
 import { Command } from "commander";
 
@@ -15,7 +16,9 @@ program
   );
   // Voltron Board ID: 2028
   // const sprints = await client.GetBoardSprints(2028);
-  // console.log(sprints.sort((a, b) => b.id - a.id));
-  const issues = await client.getIssuesForSprint(37032);
-  console.log(issues);
+  const sprintId = 37032;
+  const issues = await client.getIssuesForSprint(sprintId);
+  const notCompleted = FilterForIncompleteIssuesInSprint(sprintId, issues);
+  console.log("Completed " + issues.length);
+  console.log("Incomplete " + notCompleted.length);
 })();
