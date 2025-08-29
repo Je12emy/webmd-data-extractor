@@ -1,8 +1,6 @@
 import { PaginatedIssueSchema } from "./types/Issue";
-import { PaginatedAgileResponseSchema } from "./types/Jira/PaginatedResponse";
-import { Sprint, SprintValidationSchema } from "./types/Sprint";
 
-export class JiraHttpClient {
+export class Jira {
   readonly baseUrl: string;
   private apiEndpoint: string;
   private agileEndpoint: string;
@@ -30,27 +28,6 @@ export class JiraHttpClient {
     return await data.json();
   }
 
-  async GetBoardSprints(id: number) {
-    let fetchMore = true;
-    let cursor = 0;
-    let data: Sprint[] = [];
-    const schema = PaginatedAgileResponseSchema(SprintValidationSchema);
-
-    while (fetchMore) {
-      // console.debug("Fetching sprints...");
-      const response = await this.fetchBoardSprintData(id, cursor);
-      const result = await schema.parseAsync(await response.json());
-      if (result.isLast) {
-        fetchMore = false;
-      }
-      cursor += result.maxResults;
-      data = [...data, ...result.values];
-      // console.debug("Fetching more sprints...");
-    }
-    // console.trace(data);
-    return data;
-  }
-
   async getIssuesForSprint(sprintId: number) {
     const url = `${this.agileEndpoint}/sprint/${sprintId}/issue`;
     const response = await fetch(url, {
@@ -61,12 +38,7 @@ export class JiraHttpClient {
     return result.issues;
   }
 
-  private async fetchBoardSprintData(boardId: number, startAt: number = 0) {
-    return await fetch(
-      `${this.agileEndpoint}/board/${boardId}/sprint?state=closed&startAt=${startAt}`,
-      {
-        ...this.requestInit,
-      }
-    );
+  async fetchJira(url: URL | string) {
+    return await fetch(`${this.agileEndpoint}${url}`, this.requestInit);
   }
 }

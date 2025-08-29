@@ -11,6 +11,7 @@
       "skipFiles": ["<node_internals>/**"],
       "program": "${workspaceFolder}\\src\\index.ts",
       "runtimeArgs": ["--env-file=./.env", "-r", "ts-node/register"],
+      "args": ["sprints"],
       "env": {
         "NODE_ENV": "development"
       },
