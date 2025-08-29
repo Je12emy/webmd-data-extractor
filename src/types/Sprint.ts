@@ -17,6 +17,12 @@ export const paginatedSprintSchema = PaginatedAgileResponseSchema.extend({
 
 export type SprintData = z.infer<typeof sprintSchema>;
 
+export type SprintCompletion = {
+  id: number;
+  name: string;
+  completion: number;
+};
+
 export class Sprint {
   private _sprint: SprintData;
   private _issues: IssuesData;

@@ -3,6 +3,7 @@ import { Jira } from "./api";
 import { Command } from "commander";
 import { select, checkbox } from "@inquirer/prompts";
 import { Board } from "./types/Board";
+import { SprintCompletion } from "./types/Sprint";
 
 const config = {
   boards: [
@@ -55,7 +56,7 @@ program
       .sort((a, b) => b.id - a.id)
       .slice(0, limit - 1);
 
-    const sprint = await select({
+    const sprint = await checkbox({
       message: "Select a sprint",
       choices: [
         ...availableSprints.map((s) => ({
@@ -64,8 +65,20 @@ program
         })),
       ],
     });
-    await board.selectSprint(sprint);
-    console.log(`Completition: ${board._selected?._completition}%`);
+
+    const table: SprintCompletion[] = [];
+    await Promise.all(
+      sprint.map(async (s) => {
+        await board.selectSprint(s);
+        table.push({
+          id: s.id,
+          name: s.name,
+          completion: board._selected?._completition!,
+        });
+      })
+    );
+    table.sort((a, b) => b.id - a.id);
+    console.table(table, ["name", "completion"]);
   });
 
 program.parse(process.argv);
