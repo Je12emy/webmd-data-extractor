@@ -44,6 +44,11 @@ export class Sprint {
   }
 
   private calculateIncompleteIssues() {
+    /*
+     * Closed sprints keep a history of where this issue has been part of
+     * since it is an ordered list, you can check if the last sprint is the currently
+     * selected sprint to determine if the issue was closed there.
+     *  */
     return this._issues.filter(
       (x) => x.fields.closedSprints[0].id !== this._sprint.id
     ).length;

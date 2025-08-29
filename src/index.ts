@@ -1,8 +1,29 @@
 #!/usr/bin/env node
 import { Jira } from "./api";
 import { Command } from "commander";
-import { select } from "@inquirer/prompts";
+import { select, checkbox } from "@inquirer/prompts";
 import { Board } from "./types/Board";
+
+const config = {
+  boards: [
+    {
+      id: 2028,
+      name: "Voltron",
+    },
+    {
+      id: 2031,
+      name: "Brute Squad",
+    },
+    {
+      id: 2029,
+      name: "Rebel Alliance",
+    },
+    {
+      id: 2030,
+      name: "Lebowsky",
+    },
+  ],
+};
 
 const program = new Command();
 
@@ -18,30 +39,33 @@ program
 
 program
   .command("sprints")
+  .argument("limit", "How many sprints to fetch")
   .description("Get sprint completition percentage")
-  .action(async () => {
+  .action(async (limit: number = 10) => {
     const { id, name } = await select({
       message: "Select a board",
-      choices: [
-        {
-          name: "Voltron",
-          value: { id: 2028, name: "Voltron" },
-        },
-      ],
+      choices: config.boards.map((x) => ({
+        name: x.name,
+        value: x,
+      })),
     });
 
     const board = await Board.Initialize(id, name, client);
+    const availableSprints = board._sprints
+      .sort((a, b) => b.id - a.id)
+      .slice(0, limit - 1);
+
     const sprint = await select({
       message: "Select a sprint",
       choices: [
-        ...board._sprints.map((s) => ({
+        ...availableSprints.map((s) => ({
           name: s.name,
           value: s,
         })),
       ],
     });
     await board.selectSprint(sprint);
-    console.log(`Completition: ${board._selected?._completition}`);
+    console.log(`Completition: ${board._selected?._completition}%`);
   });
 
 program.parse(process.argv);
