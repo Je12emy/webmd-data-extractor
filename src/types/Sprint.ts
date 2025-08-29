@@ -21,6 +21,8 @@ export type SprintCompletion = {
   id: number;
   name: string;
   completion: number;
+  startDate?: string;
+  endDate?: string;
 };
 
 export class Sprint {

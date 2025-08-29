@@ -16,8 +16,12 @@ const config = {
       name: "Brute Squad",
     },
     {
+      id: 2609,
+      name: "Sharks",
+    },
+    {
       id: 2029,
-      name: "Rebel Alliance",
+      name: "(legacy now Sharks) Rebel Alliance",
     },
     {
       id: 2030,
@@ -74,11 +78,13 @@ program
           id: s.id,
           name: s.name,
           completion: board._selected?._completition!,
+          startDate: s.startDate!,
+          endDate: s.endDate!,
         });
       })
     );
     table.sort((a, b) => b.id - a.id);
-    console.table(table, ["name", "completion"]);
+    console.table(table);
   });
 
 program.parse(process.argv);
