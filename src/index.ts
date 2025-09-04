@@ -17,6 +17,11 @@ const config: Config = {
           name: "jzelaya",
           key: "JIRAUSER22581",
         },
+        {
+          displayName: "Sergio Ibarra",
+          name: "sibarra",
+          key: "JIRAUSER23087",
+        },
       ],
     },
     {
@@ -147,19 +152,19 @@ program
 
     const table: Velocity[] = [];
     await Promise.all(
-      selectedSprints.map(async (sprint) => {
-        const selected = await board.selectSprint(sprint);
-        const worked = selected.getWorkedIssuesByAssignedUser(
-          selectedTeamMembers[0].key
-        );
-        table.push({
-          name: sprint.name,
-          member: selectedTeamMembers[0].displayName,
-          issuesCount: worked.length,
-          totalPoints: worked.reduce((a, b) => {
-            const points = b.fields.customfield_10273;
-            return a + (points ? points : 1);
-          }, 0),
+      selectedTeamMembers.flatMap((member) => {
+        return selectedSprints.map(async (sprint) => {
+          const selected = await board.selectSprint(sprint);
+          const worked = selected.getWorkedIssuesByAssignedUser(member.key);
+          table.push({
+            name: sprint.name,
+            member: member.displayName,
+            issuesCount: worked.length,
+            totalPoints: worked.reduce((a, b) => {
+              const points = b.fields.customfield_10273;
+              return a + (points ? points : 1);
+            }, 0),
+          });
         });
       })
     );
