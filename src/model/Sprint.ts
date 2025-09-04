@@ -91,10 +91,26 @@ export class Sprint {
     });
   }
 
+  getWorkedIssuesByAssignedUser(userKey: string) {
+    return this.issues.filter((x) =>
+      x.changelog.histories.some((h) =>
+        h.items.some(
+          (item) =>
+            (item.field === "assignee" || item.field == "Secondary Assignee") &&
+            item.to === userKey
+        )
+      )
+    );
+  }
+
   private static async fetchIssues(jira: Jira, sprintId: number) {
-    const response = await jira.fetchAgile(`/sprint/${sprintId}/issue`);
+    const response = await jira.fetchAgile(
+      `/sprint/${sprintId}/issue?expand=changelog`
+    );
     const json = (await response.json()) as PaginatedIssue;
-    let data = json.issues.map((x) => new Issue(x.id, x.key, x.fields));
+    let data = json.issues.map(
+      (x) => new Issue(x.id, x.key, x.fields, x.changelog)
+    );
     return data;
   }
 }

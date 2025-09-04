@@ -3,29 +3,41 @@ import { Jira } from "./api";
 import { Command } from "commander";
 import { select, checkbox } from "@inquirer/prompts";
 import { Board } from "./model/Board";
-import { Completition } from "@model/Completion";
+import { Completition, Velocity } from "@model/Completion";
+import { Config } from "@model/Config";
 
-const config = {
+const config: Config = {
   boards: [
     {
       id: 2028,
       name: "Voltron",
+      members: [
+        {
+          displayName: "Jeremy Zelaya",
+          name: "jzelaya",
+          key: "JIRAUSER22581",
+        },
+      ],
     },
     {
       id: 2031,
       name: "Brute Squad",
+      members: [],
     },
     {
       id: 2609,
       name: "Sharks",
+      members: [],
     },
     {
       id: 2029,
       name: "(legacy now Sharks) Rebel Alliance",
+      members: [],
     },
     {
       id: 2030,
       name: "Lebowsky",
+      members: [],
     },
   ],
 };
@@ -90,6 +102,67 @@ program
       })
     );
     table.sort((a, b) => b.id - a.id);
+    console.table(table);
+  });
+
+program
+  .command("velocity")
+  .description("Get sprint completition percentage")
+  .option("-l, --limit [numbe]>", "How many sprints to fetch", "10")
+  .action(async (options) => {
+    let limit = parseInt(options.limit);
+
+    const { id, name } = await select({
+      message: "Select a board",
+      choices: config.boards.map((x) => ({
+        name: x.name,
+        value: x,
+      })),
+    });
+
+    const board = await Board.Initialize(id, name, client);
+    const boardSprints = board.sprints.slice(0, limit);
+
+    const selectedSprints = await checkbox({
+      message: "Select a sprint",
+      choices: [
+        ...boardSprints.map((s) => ({
+          name: s.name,
+          value: s,
+        })),
+      ],
+    });
+
+    const selectedTeamMembers = await checkbox({
+      message: "Select team members to include",
+      choices: [
+        ...config.boards
+          .find((b) => b.id === id)!
+          .members.map((m) => ({
+            name: m.displayName,
+            value: m,
+          })),
+      ],
+    });
+
+    const table: Velocity[] = [];
+    await Promise.all(
+      selectedSprints.map(async (sprint) => {
+        const selected = await board.selectSprint(sprint);
+        const worked = selected.getWorkedIssuesByAssignedUser(
+          selectedTeamMembers[0].key
+        );
+        table.push({
+          name: sprint.name,
+          member: selectedTeamMembers[0].displayName,
+          issuesCount: worked.length,
+          totalPoints: worked.reduce((a, b) => {
+            const points = b.fields.customfield_10273;
+            return a + (points ? points : 1);
+          }, 0),
+        });
+      })
+    );
     console.table(table);
   });
 
