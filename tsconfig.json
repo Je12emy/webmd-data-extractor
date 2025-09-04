@@ -10,7 +10,7 @@
     "baseUrl": "./src",
     "sourceMap": true,
     "paths": {
-      "@types/*": ["./types/*"]
+      "@model/*": ["./model/*"]
     }
   },
   "include": ["src/**/*.ts"]

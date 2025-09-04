@@ -1,5 +1,3 @@
-import { PaginatedIssueSchema } from "./types/Issue";
-
 export class Jira {
   readonly baseUrl: string;
   private apiEndpoint: string;
@@ -21,24 +19,11 @@ export class Jira {
     };
   }
 
-  async GetBoardById(id: number) {
-    const data = await fetch(`${this.agileEndpoint}/board/${id}`, {
-      ...this.requestInit,
-    });
-    return await data.json();
-  }
-
-  async getIssuesForSprint(sprintId: number) {
-    const url = `${this.agileEndpoint}/sprint/${sprintId}/issue`;
-    const response = await fetch(url, {
-      ...this.requestInit,
-    });
-    const data = await response.json();
-    const result = await PaginatedIssueSchema.parseAsync(data);
-    return result.issues;
-  }
-
-  async fetchJira(url: URL | string) {
+  async fetchAgile(url: URL | string) {
     return await fetch(`${this.agileEndpoint}${url}`, this.requestInit);
+  }
+
+  async fetchApi(url: URL | string) {
+    return await fetch(`${this.apiEndpoint}${url}`, this.requestInit);
   }
 }

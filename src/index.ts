@@ -2,8 +2,8 @@
 import { Jira } from "./api";
 import { Command } from "commander";
 import { select, checkbox } from "@inquirer/prompts";
-import { Board } from "./types/Board";
-import { SprintCompletion } from "./types/Sprint";
+import { Board } from "./model/Board";
+import { Completition } from "@model/Completion";
 
 const config = {
   boards: [
@@ -43,10 +43,11 @@ program
   .version("1.0.0");
 
 program
-  .command("sprints")
-  .argument("limit", "How many sprints to fetch")
+  .command("completion")
   .description("Get sprint completition percentage")
-  .action(async (limit: number = 10) => {
+  .option("-l, --limit [numbe]>", "How many sprints to fetch", "10")
+  .action(async (options) => {
+    let limit = parseInt(options.limit);
     const { id, name } = await select({
       message: "Select a board",
       choices: config.boards.map((x) => ({
@@ -56,30 +57,35 @@ program
     });
 
     const board = await Board.Initialize(id, name, client);
-    const availableSprints = board._sprints
-      .sort((a, b) => b.id - a.id)
-      .slice(0, limit - 1);
+    const boardSprints = board.sprints.slice(0, limit);
 
-    const sprint = await checkbox({
+    const selectedSprints = await checkbox({
       message: "Select a sprint",
       choices: [
-        ...availableSprints.map((s) => ({
+        ...boardSprints.map((s) => ({
           name: s.name,
           value: s,
         })),
       ],
     });
 
-    const table: SprintCompletion[] = [];
+    const table: Completition[] = [];
     await Promise.all(
-      sprint.map(async (s) => {
-        await board.selectSprint(s);
+      selectedSprints.map(async (sprint) => {
+        const selected = await board.selectSprint(sprint);
+
         table.push({
-          id: s.id,
-          name: s.name,
-          completion: board._selected?._completition!,
-          startDate: s.startDate!,
-          endDate: s.endDate!,
+          id: sprint.id,
+          name: sprint.name,
+          totalIssues: selected.issues.length,
+          incompleteIssues: selected.getIncompleteIssues().length,
+          completion: selected.completition,
+          startDate: sprint.startDate
+            ? new Date(sprint.startDate).toLocaleDateString()
+            : "N/A",
+          endDate: sprint.endDate
+            ? new Date(sprint.endDate).toLocaleDateString()
+            : "N/A",
         });
       })
     );
