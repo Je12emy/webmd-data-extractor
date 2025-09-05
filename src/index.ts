@@ -3,7 +3,7 @@ import { Jira } from "./api";
 import { Command } from "commander";
 import { select, checkbox } from "@inquirer/prompts";
 import { Board } from "./model/Board";
-import { Completition, Velocity } from "@model/Completion";
+import { Completion, Velocity } from "@model/Reports";
 import { Config } from "@model/Config";
 
 const config: Config = {
@@ -86,7 +86,7 @@ program
       ],
     });
 
-    const table: Completition[] = [];
+    const table: Completion[] = [];
     await Promise.all(
       selectedSprints.map(async (sprint) => {
         const selected = await board.selectSprint(sprint);
@@ -150,14 +150,15 @@ program
       ],
     });
 
-    const table: Velocity[] = [];
+    let table: Velocity[] = [];
     await Promise.all(
       selectedTeamMembers.flatMap((member) => {
         return selectedSprints.map(async (sprint) => {
           const selected = await board.selectSprint(sprint);
           const worked = selected.getWorkedIssuesByAssignedUser(member.key);
           table.push({
-            name: sprint.name,
+            sprintId: sprint.id,
+            sprintName: sprint.name,
             member: member.displayName,
             issuesCount: worked.length,
             totalPoints: worked.reduce((a, b) => {
@@ -168,6 +169,7 @@ program
         });
       })
     );
+    table = table.sort((a, b) => b.sprintId - a.sprintId);
     console.table(table);
   });
 

@@ -1,6 +1,3 @@
-import { Team } from "@model/Team";
-import { Jira } from "@model/Jira";
-
 export type Config = {
   boards: BoardConfig[];
 };

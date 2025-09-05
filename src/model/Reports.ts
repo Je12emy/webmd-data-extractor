@@ -1,4 +1,4 @@
-export type Completition = {
+export type Completion = {
   id: number;
   name: string;
   totalIssues: number;
@@ -9,7 +9,8 @@ export type Completition = {
 };
 
 export type Velocity = {
-  name: string;
+  sprintId: number;
+  sprintName: string;
   member: string;
   issuesCount: number;
   totalPoints: number;
