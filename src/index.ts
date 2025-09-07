@@ -3,7 +3,7 @@ import { Jira } from "./api";
 import { Command } from "commander";
 import { select, checkbox } from "@inquirer/prompts";
 import { Board } from "./model/Board";
-import { Completion, sortByTeamMember, Velocity } from "./model/Reports";
+import { Completion, sortByTeamMemberDesc, Velocity } from "./model/Reports";
 import { Config } from "./model/Config";
 
 const config: Config = {
@@ -173,6 +173,7 @@ program
     });
 
     let report = new Map<string, Velocity[]>();
+    let sortedReport = new Map<string, Velocity[]>();
 
     await Promise.all(
       selectedSprints.map(async (sprint) => {
@@ -196,9 +197,14 @@ program
       })
     );
 
-    report.forEach((value, key) => {
+    // Sort by sprint name
+    [...report]
+      .sort((a, b) => a[0].localeCompare(b[0]))
+      .forEach((x) => sortedReport.set(x[0], x[1]));
+
+    sortedReport.forEach((value, key) => {
       console.log(`\nSprint: ${key}`);
-      console.table(value.sort(sortByTeamMember), [
+      console.table(value.sort(sortByTeamMemberDesc), [
         "member",
         "issuesCount",
         "totalPoints",

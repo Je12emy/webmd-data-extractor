@@ -20,6 +20,6 @@ export function sortBySprintId(a: Velocity, b: Velocity) {
   return a.sprintId - b.sprintId;
 }
 
-export function sortByTeamMember(a: Velocity, b: Velocity) {
-  return a.member.localeCompare(b.member);
+export function sortByTeamMemberDesc(a: Velocity, b: Velocity) {
+  return b.member.localeCompare(a.member);
 }
