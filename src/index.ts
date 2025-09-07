@@ -3,8 +3,8 @@ import { Jira } from "./api";
 import { Command } from "commander";
 import { select, checkbox } from "@inquirer/prompts";
 import { Board } from "./model/Board";
-import { Completion, Velocity } from "@model/Reports";
-import { Config } from "@model/Config";
+import { Completion, sortByTeamMember, Velocity } from "./model/Reports";
+import { Config } from "./model/Config";
 
 const config: Config = {
   boards: [
@@ -27,17 +27,39 @@ const config: Config = {
     {
       id: 2031,
       name: "Brute Squad",
-      members: [],
+      members: [
+        {
+          displayName: "Greiving Rosales",
+          name: "gjiron",
+          key: "JIRAUSER22014",
+        },
+      ],
     },
     {
       id: 2609,
       name: "Sharks",
-      members: [],
-    },
-    {
-      id: 2029,
-      name: "(legacy now Sharks) Rebel Alliance",
-      members: [],
+      members: [
+        {
+          displayName: "Ricardo Villalobos",
+          name: "rvillalobos",
+          key: "JIRAUSER21190",
+        },
+        {
+          displayName: "Daniel Araya",
+          name: "daraya",
+          key: "JIRAUSER25739",
+        },
+        {
+          displayName: "Surya Prakash",
+          name: "sprakash",
+          key: "JIRAUSER19910",
+        },
+        {
+          displayName: "Yogesh Nipane",
+          name: "ynipane",
+          key: "JIRAUSER23233",
+        },
+      ],
     },
     {
       id: 2030,
@@ -150,13 +172,16 @@ program
       ],
     });
 
-    let table: Velocity[] = [];
+    let report = new Map<string, Velocity[]>();
+
     await Promise.all(
-      selectedTeamMembers.flatMap((member) => {
-        return selectedSprints.map(async (sprint) => {
-          const selected = await board.selectSprint(sprint);
+      selectedSprints.map(async (sprint) => {
+        let sprintVelocity: Velocity[] = [];
+        const selected = await board.selectSprint(sprint);
+
+        selectedTeamMembers.forEach((member) => {
           const worked = selected.getWorkedIssuesByAssignedUser(member.key);
-          table.push({
+          sprintVelocity.push({
             sprintId: sprint.id,
             sprintName: sprint.name,
             member: member.displayName,
@@ -167,10 +192,18 @@ program
             }, 0),
           });
         });
+        report.set(sprint.name, sprintVelocity);
       })
     );
-    table = table.sort((a, b) => b.sprintId - a.sprintId);
-    console.table(table);
+
+    report.forEach((value, key) => {
+      console.log(`\nSprint: ${key}`);
+      console.table(value.sort(sortByTeamMember), [
+        "member",
+        "issuesCount",
+        "totalPoints",
+      ]);
+    });
   });
 
 program.parse(process.argv);

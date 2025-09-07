@@ -5,13 +5,29 @@
   "version": "0.2.0",
   "configurations": [
     {
-      "name": "Debug TypeScript",
+      "name": "Debug Completion",
       "type": "node",
       "request": "launch",
       "skipFiles": ["<node_internals>/**"],
-      "program": "${workspaceFolder}\\src\\index.ts",
+      "program": "${workspaceFolder}/src/index.ts",
       "runtimeArgs": ["--env-file=./.env", "-r", "ts-node/register"],
-      "args": ["sprints"],
+      "args": ["completion", "-l", "5"],
+      "env": {
+        "NODE_ENV": "development"
+      },
+      "preLaunchTask": "npm: build",
+      "console": "integratedTerminal",
+      "outFiles": ["${workspaceFolder}/dist/**/*.js"],
+      "sourceMaps": true
+    },
+    {
+      "name": "Debug Velocity",
+      "type": "node",
+      "request": "launch",
+      "skipFiles": ["<node_internals>/**"],
+      "program": "${workspaceFolder}/src/index.ts",
+      "runtimeArgs": ["--env-file=./.env", "-r", "ts-node/register"],
+      "args": ["velocity", "-l", "5"],
       "env": {
         "NODE_ENV": "development"
       },
