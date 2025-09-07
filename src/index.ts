@@ -3,7 +3,12 @@ import { Jira } from "./api";
 import { Command } from "commander";
 import { select, checkbox } from "@inquirer/prompts";
 import { Board } from "./model/Board";
-import { Completion, sortByTeamMemberDesc, Velocity } from "./model/Reports";
+import {
+  Completion,
+  sortBySprintId,
+  sortByTeamMemberDesc,
+  Velocity,
+} from "./model/Reports";
 import { Config } from "./model/Config";
 
 const config: Config = {
@@ -108,12 +113,12 @@ program
       ],
     });
 
-    const table: Completion[] = [];
+    const report: Completion[] = [];
     await Promise.all(
       selectedSprints.map(async (sprint) => {
         const selected = await board.selectSprint(sprint);
 
-        table.push({
+        report.push({
           id: sprint.id,
           name: sprint.name,
           totalIssues: selected.issues.length,
@@ -128,8 +133,13 @@ program
         });
       })
     );
-    table.sort((a, b) => b.id - a.id);
-    console.table(table);
+    report.sort(sortBySprintId);
+    console.table(report, [
+      "name",
+      "totalIssues",
+      "incompleteIssues",
+      "completion",
+    ]);
   });
 
 program

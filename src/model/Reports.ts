@@ -16,8 +16,8 @@ export type Velocity = {
   totalPoints: number;
 };
 
-export function sortBySprintId(a: Velocity, b: Velocity) {
-  return a.sprintId - b.sprintId;
+export function sortBySprintId(a: Completion, b: Completion) {
+  return a.id - b.id;
 }
 
 export function sortByTeamMemberDesc(a: Velocity, b: Velocity) {
