@@ -50,6 +50,16 @@ const config: Config = {
           key: "JIRAUSER21190",
         },
         {
+          displayName: "Dustin Campos",
+          name: "dcampos",
+          key: "JIRAUSER21622",
+        },
+        {
+          displayName: "Luis Aardon",
+          name: "lardon",
+          key: "JIRAUSER23797",
+        },
+        {
           displayName: "Daniel Araya",
           name: "daraya",
           key: "JIRAUSER25739",
@@ -69,7 +79,23 @@ const config: Config = {
     {
       id: 2030,
       name: "Lebowsky",
-      members: [],
+      members: [
+        {
+          displayName: "Miguel Servellon",
+          name: "mservellon",
+          key: "JIRAUSER23813",
+        },
+        {
+          displayName: "Luis Osvaldo Perez",
+          name: "lperez",
+          key: "JIRAUSER23086",
+        },
+        {
+          displayName: "Kevin Vasquez",
+          name: "kvasquez",
+          key: "JIRAUSER21970",
+        },
+      ],
     },
   ],
 };
