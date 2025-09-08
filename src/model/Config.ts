@@ -1,5 +1,8 @@
 export type Config = {
   boards: BoardConfig[];
+  jira: {
+    host: string;
+  };
 };
 
 type BoardConfig = {

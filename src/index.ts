@@ -12,6 +12,9 @@ import {
 import { Config } from "./model/Config";
 
 const config: Config = {
+  jira: {
+    host: "https://jira.internetbrands.com",
+  },
   boards: [
     {
       id: 2028,
@@ -102,10 +105,7 @@ const config: Config = {
 
 const program = new Command();
 
-const client = new Jira(
-  "https://jira.internetbrands.com",
-  process.env.ACCESS_TOKEN as string
-);
+const client = new Jira(config.jira.host, process.env.ACCESS_TOKEN as string);
 
 program
   .name("WEBMD Data Extractor")
