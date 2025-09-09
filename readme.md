@@ -1,6 +1,6 @@
-# WebMD Data Extractor
+# Jira Data Extractor
 
-A command-line tool to extract and analyze data from WebMD's Jira instance. This tool provides insights into sprint completion rates and team member velocity across different boards and sprints.
+A command-line tool to extract and analyze data from Jira. This tool provides insights into sprint completion rates and team member velocity across different boards and sprints.
 
 ## Features
 
