@@ -6,8 +6,8 @@
   "scripts": {
     "prebuild": "rimraf ./dist",
     "build": "tsc",
-    "start": "npm run build && node --env-file=./.env ./dist/index.js",
-    "dev": "node --env-file=./.env -r ts-node/register ./src/index.ts"
+    "start": "npm run build && node ./dist/index.js",
+    "dev": "node -r ts-node/register ./src/index.ts"
   },
   "author": "Je12emy",
   "license": "ISC",
