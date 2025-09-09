@@ -2,6 +2,7 @@ export type Config = {
   boards: BoardConfig[];
   jira: {
     host: string;
+    token: string;
   };
 };
 

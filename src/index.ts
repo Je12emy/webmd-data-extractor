@@ -10,102 +10,16 @@ import {
   Velocity,
 } from "./model/Reports";
 import { Config } from "./model/Config";
+import path from "path";
+import fs from "node:fs";
 
-const config: Config = {
-  jira: {
-    host: "https://jira.internetbrands.com",
-  },
-  boards: [
-    {
-      id: 2028,
-      name: "Voltron",
-      members: [
-        {
-          displayName: "Jeremy Zelaya",
-          name: "jzelaya",
-          key: "JIRAUSER22581",
-        },
-        {
-          displayName: "Sergio Ibarra",
-          name: "sibarra",
-          key: "JIRAUSER23087",
-        },
-      ],
-    },
-    {
-      id: 2031,
-      name: "Brute Squad",
-      members: [
-        {
-          displayName: "Greiving Rosales",
-          name: "gjiron",
-          key: "JIRAUSER22014",
-        },
-      ],
-    },
-    {
-      id: 2609,
-      name: "Sharks",
-      members: [
-        {
-          displayName: "Ricardo Villalobos",
-          name: "rvillalobos",
-          key: "JIRAUSER21190",
-        },
-        {
-          displayName: "Dustin Campos",
-          name: "dcampos",
-          key: "JIRAUSER21622",
-        },
-        {
-          displayName: "Luis Aardon",
-          name: "lardon",
-          key: "JIRAUSER23797",
-        },
-        {
-          displayName: "Daniel Araya",
-          name: "daraya",
-          key: "JIRAUSER25739",
-        },
-        {
-          displayName: "Surya Prakash",
-          name: "sprakash",
-          key: "JIRAUSER19910",
-        },
-        {
-          displayName: "Yogesh Nipane",
-          name: "ynipane",
-          key: "JIRAUSER23233",
-        },
-      ],
-    },
-    {
-      id: 2030,
-      name: "Lebowsky",
-      members: [
-        {
-          displayName: "Miguel Servellon",
-          name: "mservellon",
-          key: "JIRAUSER23813",
-        },
-        {
-          displayName: "Luis Osvaldo Perez",
-          name: "lperez",
-          key: "JIRAUSER23086",
-        },
-        {
-          displayName: "Kevin Vasquez",
-          name: "kvasquez",
-          key: "JIRAUSER21970",
-        },
-      ],
-    },
-  ],
-};
+const configPath = path.join(__dirname, "..", "config.json");
+const data = fs.readFileSync(configPath, "utf-8");
+const config: Config = JSON.parse(data);
 
 const program = new Command();
 
-const client = new Jira(config.jira.host, process.env.ACCESS_TOKEN as string);
+const client = new Jira(config.jira.host, config.jira.token);
 
 program
   .name("WEBMD Data Extractor")
