@@ -1,0 +1,24 @@
+{
+  "name": "@jira-data/cli",
+  "version": "1.0.0",
+  "main": "index.js",
+  "scripts": {
+    "prebuild": "rimraf ./dist",
+    "build": "tsc",
+    "start": "npm run build && node ./dist/index.js",
+    "dev": "node -r ts-node/register ./src/index.ts"
+  },
+  "author": "Je12emy",
+  "license": "ISC",
+  "devDependencies": {
+    "@types/node": "^24.3.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.9.2"
+  },
+  "dependencies": {
+    "@inquirer/prompts": "^7.8.4",
+    "commander": "^14.0.0",
+    "rimraf": "^6.0.1",
+    "@jira-data/core": "workspace:*"
+  }
+}

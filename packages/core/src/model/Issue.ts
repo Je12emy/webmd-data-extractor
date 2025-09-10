@@ -1,4 +1,4 @@
-import { Jira } from "api";
+import { Jira } from "../api";
 import { Pagination } from "./Pagination";
 import { SprintData } from "./Sprint";
 

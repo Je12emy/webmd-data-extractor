@@ -1,15 +1,15 @@
 #!/usr/bin/env node
-import { Jira } from "./api";
 import { Command } from "commander";
 import { select, checkbox } from "@inquirer/prompts";
-import { Board } from "./model/Board";
 import {
+  Board,
+  Jira,
+  Config,
   Completion,
   sortBySprintId,
   sortByTeamMemberDesc,
   Velocity,
-} from "./model/Reports";
-import { Config } from "./model/Config";
+} from "@jira-data/core";
 import path from "path";
 import fs from "node:fs";
 

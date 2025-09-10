@@ -8,10 +8,6 @@
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
     "baseUrl": "./src",
-    "sourceMap": true,
-    "paths": {
-      "@model/*": ["./model/*"]
-    }
-  },
-  "include": ["src/**/*.ts"]
+    "sourceMap": true
+  }
 }

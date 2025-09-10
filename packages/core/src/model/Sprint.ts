@@ -1,4 +1,4 @@
-import { Jira } from "api";
+import { Jira } from "../api";
 import { Issue, PaginatedIssue } from "./Issue";
 import { Pagination } from "./Pagination";
 

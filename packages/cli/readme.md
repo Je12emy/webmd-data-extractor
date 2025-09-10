@@ -1,4 +1,4 @@
-# Jira Data Extractor
+# Jira Data Extractor CLI
 
 A command-line tool to extract and analyze data from Jira. This tool provides insights into sprint completion rates and team member velocity across different boards and sprints.
 

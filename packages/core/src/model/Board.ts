@@ -1,5 +1,5 @@
 import { PaginatedSprint, Sprint, SprintData } from "./Sprint";
-import { Jira } from "api";
+import { Jira } from "../api";
 
 export type BoardData = Pick<Board, "id" | "name">;
 
