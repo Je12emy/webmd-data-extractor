@@ -1,0 +1,10 @@
+{
+  "name": "jira-data",
+  "version": "1.0.0",
+  "description": "Monorepo for Jira Data Extractor",
+  "private": true,
+  "scripts": {
+    "build": "pnpm -r run build",
+    "cli": "pnpm --filter @jira-data/cli dev"
+  }
+}

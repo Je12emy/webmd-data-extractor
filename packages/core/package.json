@@ -14,11 +14,11 @@
   "author": "Je12emy",
   "license": "ISC",
   "devDependencies": {
-    "@types/node": "^24.3.0",
-    "ts-node": "^10.9.2",
-    "typescript": "^5.9.2"
+    "@types/node": "catalog:",
+    "ts-node": "catalog:",
+    "typescript": "catalog:"
   },
   "dependencies": {
-    "rimraf": "^6.0.1"
+    "rimraf": "catalog:"
   }
 }
