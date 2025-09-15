@@ -1,5 +1,5 @@
 {
-  "$schema": "https://biomejs.dev/schemas/1.9.4/schema.json",
+  "extends": "//",
   "vcs": {
     "enabled": false,
     "clientKind": "git",
@@ -16,12 +16,6 @@
   },
   "organizeImports": {
     "enabled": true
-  },
-  "linter": {
-    "enabled": true,
-    "rules": {
-      "recommended": true
-    }
   },
   "javascript": {
     "formatter": {
