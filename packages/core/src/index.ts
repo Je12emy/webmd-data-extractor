@@ -1,4 +1,4 @@
-export { Jira } from "./api";
+export * from "./api";
 export * from "./model/Board";
 export * from "./model/Config";
 export * from "./model/Issue";

@@ -86,7 +86,7 @@ export function MembersForm({ boardId }: Props) {
 							variant="outline"
 							className="px-8 py-2 bg-gradient-to-br from-blue-600/20 to-blue-800/20 hover:from-blue-700/50 hover:to-blue-900/50 border-blue-500/30 hover:border-blue-400/50 text-white transition-all duration-300 ease-in-out transform hover:scale-105 hover:shadow-xl hover:shadow-blue-500/20"
 						>
-							Generate Report
+							<Link to="/velocity/sprints">Next</Link>
 						</Button>
 					</div>
 				</form>
