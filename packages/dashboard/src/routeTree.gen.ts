@@ -10,33 +10,63 @@
 
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
+import { Route as VelocityIndexRouteImport } from './routes/velocity/index'
+import { Route as VelocityMembersRouteImport } from './routes/velocity/members'
+import { Route as VelocityBoardRouteImport } from './routes/velocity/board'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
   path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
+const VelocityIndexRoute = VelocityIndexRouteImport.update({
+  id: '/velocity/',
+  path: '/velocity/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VelocityMembersRoute = VelocityMembersRouteImport.update({
+  id: '/velocity/members',
+  path: '/velocity/members',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const VelocityBoardRoute = VelocityBoardRouteImport.update({
+  id: '/velocity/board',
+  path: '/velocity/board',
+  getParentRoute: () => rootRouteImport,
+} as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/velocity/board': typeof VelocityBoardRoute
+  '/velocity/members': typeof VelocityMembersRoute
+  '/velocity': typeof VelocityIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/velocity/board': typeof VelocityBoardRoute
+  '/velocity/members': typeof VelocityMembersRoute
+  '/velocity': typeof VelocityIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
+  '/velocity/board': typeof VelocityBoardRoute
+  '/velocity/members': typeof VelocityMembersRoute
+  '/velocity/': typeof VelocityIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/'
+  fullPaths: '/' | '/velocity/board' | '/velocity/members' | '/velocity'
   fileRoutesByTo: FileRoutesByTo
-  to: '/'
-  id: '__root__' | '/'
+  to: '/' | '/velocity/board' | '/velocity/members' | '/velocity'
+  id: '__root__' | '/' | '/velocity/board' | '/velocity/members' | '/velocity/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
+  VelocityBoardRoute: typeof VelocityBoardRoute
+  VelocityMembersRoute: typeof VelocityMembersRoute
+  VelocityIndexRoute: typeof VelocityIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -48,11 +78,35 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/velocity/': {
+      id: '/velocity/'
+      path: '/velocity'
+      fullPath: '/velocity'
+      preLoaderRoute: typeof VelocityIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/velocity/members': {
+      id: '/velocity/members'
+      path: '/velocity/members'
+      fullPath: '/velocity/members'
+      preLoaderRoute: typeof VelocityMembersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/velocity/board': {
+      id: '/velocity/board'
+      path: '/velocity/board'
+      fullPath: '/velocity/board'
+      preLoaderRoute: typeof VelocityBoardRouteImport
+      parentRoute: typeof rootRouteImport
+    }
   }
 }
 
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
+  VelocityBoardRoute: VelocityBoardRoute,
+  VelocityMembersRoute: VelocityMembersRoute,
+  VelocityIndexRoute: VelocityIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)
