@@ -15,10 +15,13 @@ interface MyRouterContext {
 export const Route = createRootRouteWithContext<MyRouterContext>()({
 	component: () => (
 		<>
-			<Header />
-			<main className="text-center min-h-screen flex flex-col items-center justify-center bg-[#282c34] text-white text-[calc(10px+2vmin)]">
-				<Outlet />
-			</main>
+			<div className="bg-slate-800">
+				<Header />
+				<main className="flex min-h-screen flex-col text-center items-center justify-center ">
+					<Outlet />
+				</main>
+			</div>
+
 			<TanstackDevtools
 				config={{
 					position: "bottom-left",
