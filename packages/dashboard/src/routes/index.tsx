@@ -7,11 +7,15 @@ export const Route = createFileRoute("/")({
 
 function App() {
 	return (
-		<div className="text-center">
-			<header className="min-h-screen flex flex-col items-center justify-center bg-[#282c34] text-white text-[calc(10px+2vmin)]">
+		<>
+			<header className="">
+				<h1>Report Builder</h1>
+			</header>
+			<section>
+				<h1>Pick a Report Wizard</h1>
 				<Button variant="outline">Velocity Report</Button>
 				<Button variant="outline">Completion Report</Button>
-			</header>
-		</div>
+			</section>
+		</>
 	);
 }
